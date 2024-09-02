@@ -1,0 +1,26 @@
+CALL constantes
+Folder.GetFiles Folder: caminhoPasta FileFilter: $'''*''' IncludeSubfolders: False FailOnAccessDenied: True SortBy1: Folder.SortBy.NoSort SortDescending1: False SortBy2: Folder.SortBy.NoSort SortDescending2: False SortBy3: Folder.SortBy.NoSort SortDescending3: False Files=> listaArquivos
+LOOP FOREACH arquivoAtual IN listaArquivos
+    IF Contains(arquivoAtual.Extension, $'''jpg''', True) THEN
+        Folder.Create FolderPath: caminhoPasta FolderName: $'''Imagens''' Folder=> pastaImagens
+        File.RenameFiles.Rename Files: arquivoAtual NewName: $'''Arquivo_Imagem_%countImagens%''' KeepExtension: True IfFileExists: File.IfExists.DoNothing RenamedFiles=> RenamedFiles
+        File.Move Files: RenamedFiles Destination: pastaImagens IfFileExists: File.IfExists.DoNothing MovedFiles=> Arquivos_Movidos_Imagens
+        Variables.IncreaseVariable Value: countimagens IncrementValue: 1
+    END
+    IF Contains(arquivoAtual.Extension, $'''txt''', True) THEN
+        Folder.Create FolderPath: caminhoPasta FolderName: $'''Textos''' Folder=> pastaTextos
+        File.RenameFiles.Rename Files: arquivoAtual NewName: $'''Arquivo_Texto_%countTextos%''' KeepExtension: True IfFileExists: File.IfExists.DoNothing RenamedFiles=> RenamedFiles
+        File.Move Files: renamedFiles Destination: pastaTextos IfFileExists: File.IfExists.DoNothing MovedFiles=> Arquivos_Movidos_Textos
+        Variables.IncreaseVariable Value: countTextos IncrementValue: 1
+    END
+    IF Contains(arquivoAtual.Extension, $'''PDF''', True) THEN
+        Folder.Create FolderPath: caminhoPasta FolderName: $'''PDF´S''' Folder=> pastaPdfs
+        File.RenameFiles.Rename Files: arquivoAtual NewName: $'''Arquivo_PDF_%CountPdf%''' KeepExtension: True IfFileExists: File.IfExists.DoNothing RenamedFiles=> RenamedFiles
+        File.Move Files: RenamedFiles Destination: pastaPdfs IfFileExists: File.IfExists.DoNothing MovedFiles=> Arquivos_Movidos_pdf
+        Variables.IncreaseVariable Value: countPdf IncrementValue: 1
+    END
+END
+Folder.GetFiles Folder: caminhoPasta FileFilter: $'''*''' IncludeSubfolders: False FailOnAccessDenied: True SortBy1: Folder.SortBy.NoSort SortDescending1: False SortBy2: Folder.SortBy.NoSort SortDescending2: False SortBy3: Folder.SortBy.NoSort SortDescending3: False Files=> Files6
+IF IsNotEmpty(Files6) THEN
+    CALL inserir_novos_arquivos
+END

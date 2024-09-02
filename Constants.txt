@@ -1,0 +1,8 @@
+SET countPdf TO 1
+SET countTextos TO 1
+SET caminhoPasta TO $'''C:\\arquivos novos - Pasta teste 2'''
+SET imagensPasta TO $'''C:\\arquivos novos - Pasta teste 2\\Imagens'''
+SET textosPasta TO $'''C:\\arquivos novos - Pasta teste 2\\Textos'''
+SET pdfPasta TO $'''C:\\arquivos novos - Pasta teste 2\\PDF´S'''
+SET countImagens TO 1
+EXIT FUNCTION

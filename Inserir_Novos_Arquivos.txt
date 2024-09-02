@@ -1,0 +1,23 @@
+Folder.GetSubfolders Folder: $'''C:\\arquivos novos - Pasta teste 2''' FolderFilter: $'''*''' IncludeSubfolders: False FailOnAccessDenied: True SortBy1: Folder.SortBy.NoSort SortDescending1: False SortBy2: Folder.SortBy.NoSort SortDescending2: False SortBy3: Folder.SortBy.NoSort SortDescending3: False Subfolders=> Folders
+SWITCH Folders
+    CASE Contains(imagensPasta, False)
+        Folder.GetFiles Folder: $'''C:\\arquivos novos - Pasta teste 2\\Imagens''' FileFilter: $'''*''' IncludeSubfolders: False FailOnAccessDenied: True SortBy1: Folder.SortBy.NoSort SortDescending1: False SortBy2: Folder.SortBy.NoSort SortDescending2: False SortBy3: Folder.SortBy.NoSort SortDescending3: False Files=> arquivosImagens
+        SET contadorItensDaPasta TO arquivosImagens.Count
+        LOOP FOREACH arquivo IN arquivosImagens
+            Text.SplitText.SplitAtNumberOfCharacters Text: arquivo.NameWithoutExtension SplitInterval: 1 Result=> TextList
+            SET QuantidadeCaracteresDoArquivo TO TextList.Count
+            Text.GetSubtext.GetSubtextFrom Text: arquivo.NameWithoutExtension CharacterPosition: QuantidadeCaracteresDoArquivo - 1 Subtext=> Subtext2
+        END
+        Text.ToNumber Text: Subtext2 Number=> TextAsNumber
+        LOOP FOREACH arquivoImg IN Files6
+            SET nextSubtext2 TO Subtext2
+            Variables.IncreaseVariable Value: Subtext2 IncrementValue: 1
+            IF nextSubtext2 <= Subtext2 THEN
+                File.RenameFiles.Rename Files: arquivoImg NewName: $'''Arquivo_Imagem_%Subtext2%''' KeepExtension: True IfFileExists: File.IfExists.DoNothing RenamedFiles=> RenamedFiles
+                File.Move Files: RenamedFiles Destination: pastaImagens IfFileExists: File.IfExists.DoNothing MovedFiles=> Arquivos_Movidos_Imagens
+            END
+        END
+    CASE Contains(textosPasta, False)
+    CASE Contains(pdfPasta, False)
+END
+EXIT FUNCTION
